@@ -1,66 +1,114 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel Queue Example with Docker
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This repository provides an example of how to set up a Laravel application with Redis queues and a MySQL database using Docker. The application includes a simple job that sends an email, with email testing facilitated by Mailpit.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Laravel Application**: A basic Laravel setup.
+- **Redis for Queues**: Using Redis for managing Laravel queues.
+- **MySQL Database**: A MySQL database for persistent storage.
+- **Mailpit**: An email testing tool to capture and inspect outgoing emails.
+- **NGINX**: Serving the Laravel application.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Getting Started
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Prerequisites
 
-## Learning Laravel
+- Docker installed on your system.
+- Docker Compose installed on your system.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Setup
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+1. **Clone the Repository**
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+   ```sh
+   git clone https://github.com/thekubera/laravel-queue-example
+   cd laravel-queue-example
+   ```
 
-## Laravel Sponsors
+2. **Copy .env.example to .env**
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+   ```sh
+   cp .env.example .env
+   ```
 
-### Premium Partners
+3. **Build the Docker Containers**
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+   Build the containers without using the cache to ensure all dependencies are fresh.
+
+   ```sh
+   docker compose build --no-cache
+   ```
+
+4. **Run the Docker Containers**
+
+   Start the containers in detached mode.
+
+   ```sh
+   docker compose up 
+   ```
+
+5. **Run Migrations**
+
+   Run the Laravel migrations to set up the database schema.
+
+   ```sh
+   docker compose exec app php artisan migrate
+   ```
+
+### Using the Application
+
+1. **Access the Application**
+
+   Open your browser and go to `http://localhost:8000`.
+
+2. **Send an Email**
+
+   Visit `http://localhost:8000/send-email` to trigger an email being sent. You should see a message indicating the email has been queued.
+
+3. **Check the Email with Mailpit**
+
+   Open your browser and go to `http://localhost:8025` to access Mailpit. Here you can see the captured email.
+
+### Docker Compose Services
+
+- **app**: The main Laravel application container.
+- **queue**: A worker container that processes the Laravel queues.
+- **web**: An NGINX container that serves the Laravel application.
+- **db**: A MySQL database container.
+- **redis**: A Redis container for queue management.
+- **mailpit**: A container for capturing and inspecting outgoing emails.
+
+### Stopping the Application
+
+To stop and remove all running containers:
+
+```sh
+docker-compose down
+```
+
+### Troubleshooting
+
+- Ensure all environment variables in `.env` are set correctly.
+- Check the logs of the containers if you encounter issues:
+
+  ```sh
+  docker-compose logs -f
+  ```
+
+- Verify that Docker and Docker Compose are properly installed and running.
+
+### License
+
+This project is open-source and available under the [MIT License](LICENSE).
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+If you'd like to contribute, please fork the repository and use a feature branch. Pull requests are welcome.
 
-## Code of Conduct
+## Acknowledgments
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+This setup is inspired by various resources and tutorials on Docker, Laravel, and Redis integration.
 
-## Security Vulnerabilities
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+<b>Happy coding!</b>
