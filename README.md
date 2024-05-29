@@ -49,7 +49,7 @@ This repository provides an example of how to set up a Laravel application with 
    ```
 5. **Generate Laravel Application Key**
 
-   Generate Laravel Application Key
+   Open another terminal window and run the following command to generate laravel application key
 
    ```sh
    docker compose exec app php artisan key:generate
