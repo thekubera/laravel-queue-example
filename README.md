@@ -47,8 +47,15 @@ This repository provides an example of how to set up a Laravel application with 
    ```sh
    docker compose up 
    ```
+5. **Generate Laravel Application Key**
 
-5. **Run Migrations**
+   Generate Laravel Application Key
+
+   ```sh
+   docker compose exec app php artisan key:generate
+   ```
+
+6. **Run Migrations**
 
    Run the Laravel migrations to set up the database schema.
 
